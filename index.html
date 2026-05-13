@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-inch Main Drain Flow Analysis</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>2&#8243; (50 mm) Main Drain Flow Analysis</h1>
+      <p class="subtitle">Water-supply estimation per AXA XL Property Risk Consulting Guideline PRC.14.1.2.2</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="card warning">
+      <h2>Engineer&rsquo;s Caution &mdash; Read Before Use</h2>
+      <ul>
+        <li><strong>This is not a hydrant flow test.</strong> A hydrant or other large-volume flow test remains the preferred method for water-supply evaluation. A 2&#8243; drain test is an <em>interim</em> procedure when a proper flow test is not possible.</li>
+        <li><strong>Results are typically more conservative</strong> than a hydrant test because of unknown friction loss through alarm and check valves at low flows (valves may only partially open and &ldquo;flutter&rdquo; or &ldquo;chatter&rdquo;).</li>
+        <li><strong>Use only for Light Hazard or Ordinary Hazard occupancies.</strong> Do not rely on a 2&#8243; drain test for Extra Hazard or storage occupancies where larger flows are required.</li>
+        <li>The result applies only at the test point. It <strong>cannot be extrapolated</strong> to larger flows, other risers, or other areas of the facility.</li>
+        <li>Best accuracy (&plusmn;5%) is achieved when the flow developed in the test is close to the system&rsquo;s actual demand.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>1. Pre-Test Conditions</h2>
+      <p class="muted">Confirm every item below before running the test. If any item cannot be satisfied, the result is not valid by this method.</p>
+      <label class="check"><input type="checkbox" class="precheck"> Drain(s) are 2&#8243; (50 mm) and free of internal corrosion.</label>
+      <label class="check"><input type="checkbox" class="precheck"> Discharge outlet is a reasonably well-reamed 2&#8243; pipe, a 2&#8243; 45&deg; elbow, or an air-gap device that allows full flow without backup.</label>
+      <label class="check"><input type="checkbox" class="precheck"> Drain(s) discharge to a safe location &mdash; no water damage will result with the drain valve fully open.</label>
+      <label class="check"><input type="checkbox" class="precheck"> Riser gauge is accurate and tapped into the riser (or alarm check valve), <strong>not</strong> the drain line.</label>
+      <label class="check"><input type="checkbox" class="precheck"> Fire pumps, jockey pumps, and booster pumps are shut off (when testing the municipal supply); impairment precautions per PRC.1.1.0 are in place.</label>
+      <label class="check"><input type="checkbox" class="precheck"> True static pressure recorded &mdash; trapped pressure from jockey or excess-pressure pumps has been bled off.</label>
+      <label class="check"><input type="checkbox" class="precheck"> Residual / flowing pressure has stabilized before being recorded.</label>
+      <p id="precheck-status" class="muted small"></p>
+    </section>
+
+    <section class="card">
+      <h2>2. Static Pressure</h2>
+      <div class="row">
+        <label>Static pressure at riser gauge
+          <div class="input-suffix">
+            <input type="number" id="static" min="0" step="0.1" value="100">
+            <span>psi</span>
+          </div>
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Drain Configuration</h2>
+      <p class="muted">Add each 2&#8243; drain that will be flowed. Equivalent length is calculated from pipe length + fittings per Table 1 of PRC.14.1.2.2.</p>
+      <div class="fittings-key">
+        <strong>Equivalent length per fitting (ft):</strong>
+        Angle valve 29 &middot; Globe valve 58 &middot; Gate valve 1 &middot; 90&deg; ell 5 &middot; 45&deg; ell 2 &middot; Tee (flow turns) 10 &middot; Cross (flow turns) 10
+      </div>
+      <div id="drains"></div>
+      <button class="btn-secondary" id="add-drain-btn">+ Add Drain</button>
+    </section>
+
+    <section class="card">
+      <h2>4. Test Scenarios</h2>
+      <p class="muted">Each scenario is one flow reading and produces one point on the supply curve. Mark which drains are flowing simultaneously, enter the residual pressure at each flowing drain&rsquo;s riser gauge, and select which gauge is the reference point for the supply curve.</p>
+      <div id="scenarios"></div>
+      <button class="btn-secondary" id="add-scenario-btn">+ Add Test Scenario</button>
+    </section>
+
+    <section class="card">
+      <h2>5. Results</h2>
+      <button class="btn-primary" id="calc-btn">Calculate Flow &amp; Plot Supply Curve</button>
+      <div id="results"></div>
+      <div class="chart-wrap"><canvas id="chart"></canvas></div>
+      <p id="curve-info" class="muted small"></p>
+    </section>
+
+    <footer>
+      <p>Calculations use a discharge coefficient <em>c</em> = 0.85 (the more conservative value, applicable to a 45&deg; elbow discharge or an unreamed 2&#8243; outlet) and Hazen-Williams friction loss with <em>C</em> = 120 for the 2&#8243; drain pipe (Schedule 40, ID &asymp; 2.067&#8243;). The supply curve is fit and plotted on N<sup>1.85</sup> semi-exponential graph paper.</p>
+      <p class="small">This tool implements the method described in AXA XL PRC.14.1.2.2 (2020). It is an aid only; the responsible engineer must interpret results and confirm applicability.</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
