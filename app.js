@@ -568,3 +568,19 @@ function loadExample() {
 drains.push(makeDrain('Riser A'));
 renderDrains();
 renderScenarios();
+
+// -------- Tab switching --------
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      const active = b.dataset.tab === target;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.toggle('active', p.id === 'tab-' + target);
+    });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+});
