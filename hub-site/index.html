@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>John Dreher's Fire Protection Engineering Tools</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="eyebrow">John Dreher, P.E.</p>
+      <h1>Fire Protection Engineering Tools</h1>
+      <p class="lede">A growing collection of free, browser-based calculators and analyzers for fire protection engineering. Each tool runs entirely in your browser &mdash; no install, no signup, no data ever leaves your computer.</p>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="tools">
+      <h2 class="section-title">Tools</h2>
+      <div class="tool-grid">
+
+        <a class="tool-card" href="https://jmdreher1-svg.github.io/2-Inch-Main-Drain-Test/">
+          <div class="tool-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="48" height="48">
+              <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" stroke-width="3"/>
+              <path d="M20 36 Q32 24 44 36" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="20" cy="36" r="2.5" fill="currentColor"/>
+              <circle cx="44" cy="36" r="2.5" fill="currentColor"/>
+              <line x1="32" y1="12" x2="32" y2="22" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>2&#8243; Main Drain Flow Analysis</h3>
+          <p class="tool-desc">Estimate the municipal water supply available at a sprinkler riser using a 2&#8243; main drain test, per AXA XL PRC.14.1.2.2. Computes drain flow from residual pressure and equivalent length, plots the fitted supply curve on N<sup>1.85</sup> paper, and includes the full physics derivation.</p>
+          <p class="tool-meta">Method: PRC.14.1.2.2 &middot; Light/Ordinary Hazard occupancies</p>
+          <span class="tool-launch">Launch tool &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="https://jmdreher1-svg.github.io/Fire-Pump-Test-Curves/">
+          <div class="tool-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="48" height="48">
+              <path d="M8 50 L8 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              <path d="M8 50 L56 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              <path d="M12 18 Q14 18 18 22 T34 38 T54 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="18" cy="22" r="3" fill="currentColor"/>
+              <circle cx="34" cy="38" r="3" fill="currentColor"/>
+              <circle cx="50" cy="48" r="3" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Fire Pump Test Curves</h3>
+          <p class="tool-desc">Plot and analyze fire pump performance from churn, rated, and 150% test points. Compare measured against rated curves to support acceptance testing and annual flow tests.</p>
+          <p class="tool-meta">Method: NFPA 25 / NFPA 20</p>
+          <span class="tool-launch">Launch tool &rarr;</span>
+        </a>
+
+        <div class="tool-card placeholder">
+          <div class="tool-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="48" height="48">
+              <circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="4 4"/>
+              <line x1="32" y1="22" x2="32" y2="42" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              <line x1="22" y1="32" x2="42" y2="32" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>More tools coming</h3>
+          <p class="tool-desc">Future additions may include hydrant flow test analysis, sprinkler hydraulic calculations, standpipe demand calculators, and more.</p>
+          <p class="tool-meta">Have a request? <a href="https://github.com/jmdreher1-svg">Open an issue on GitHub</a>.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="about">
+      <h2 class="section-title">About</h2>
+      <p>These tools are written and maintained by John Dreher, P.E., a fire protection engineer. They are intended as engineering aids, not as a replacement for code-required testing or for the judgement of a licensed engineer. Each tool documents its assumptions, limitations, and the governing standard it implements.</p>
+      <p>All tools are open source. Source code, math derivations, and a full validation test suite are available in each repository.</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>&copy; <span id="year"></span> John Dreher, P.E. &middot; <a href="https://github.com/jmdreher1-svg">github.com/jmdreher1-svg</a></p>
+      <p class="disclaimer">These tools are provided "as is" without warranty of any kind. The responsible engineer is solely accountable for interpretation of results, applicability to the specific scenario, and compliance with all applicable codes and standards.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
