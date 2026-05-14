@@ -1,0 +1,348 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black,
+}
+
+\title{The Physics Behind the 2\,inch (50\,mm) Main Drain Flow Test}
+\author{Implementation notes for AXA XL PRC.14.1.2.2}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{What we are doing}
+
+A 2\,inch main drain test estimates the available municipal (or yard) water
+supply at a sprinkler riser, without flowing a hydrant. We open the
+2\,inch drain wide, let the system stabilize, and read \emph{two} pressures
+on the riser gauge:
+\begin{itemize}
+  \item the \textbf{static pressure} $P_S$ before opening the drain, and
+  \item the \textbf{residual pressure} $P_R$ while the drain is flowing.
+\end{itemize}
+
+What we want is the \textbf{drain flow} $Q$ in gallons per minute (gpm).
+We can't measure $Q$ directly without a pitot, but we can compute it from
+$P_R$ if we know the equivalent length of the drain piping. The chart in
+PRC.14.1.2.2 Figure~1 is a graphical solution of the same equations
+derived below.
+
+\section{The drain as a hydraulic circuit}
+
+While the drain is flowing, the only thing between the riser gauge and the
+atmosphere is a length of 2\,inch pipe with some fittings. Energy is lost
+in exactly two places:
+
+\begin{enumerate}
+  \item \textbf{Outlet pressure} ($P_{\text{out}}$): the kinetic energy
+        the water carries as it leaves the discharge. This is the velocity
+        head, captured by the discharge coefficient of the outlet.
+  \item \textbf{Friction loss} ($P_{\text{f}}$): pressure lost rubbing
+        against the pipe walls and through fittings between the riser and
+        the outlet.
+\end{enumerate}
+
+The elevation difference between the riser gauge and the outlet is usually
+a couple of feet, contributing $<1$\,psi, and is ignored. Velocity
+pressure at the gauge is also ignored on the assumption that the gauge is
+tapped into the riser, not into the drain line (this is one of the
+stated parameters of the method).
+
+Conservation of energy then gives the working equation:
+\begin{equation}
+\boxed{\;P_R \;=\; P_{\text{out}}(Q) \;+\; P_{\text{f}}(Q, L)\;}
+\label{eq:main}
+\end{equation}
+where $L$ is the equivalent length of 2\,inch pipe between the riser and
+the outlet.
+
+\section{Outlet pressure term}
+
+The standard fire-protection discharge equation for a smooth orifice or
+short tube is
+\begin{equation}
+Q \;=\; 29.84\, c\, d^{2}\, \sqrt{P_{\text{out}}}
+\label{eq:disch}
+\end{equation}
+with $Q$ in gpm, $d$ the orifice diameter in inches, $P_{\text{out}}$ in psi,
+and $c$ a dimensionless discharge coefficient.
+
+PRC.14.1.2.2 reports measured outlet coefficients of approximately
+$c=0.90$ for a reasonably well-reamed 2\,inch outlet and $c=0.85$ for an
+unreamed 2\,inch outlet or for discharge through a 45$^\circ$ elbow. The
+guideline adopts the more conservative
+\[
+c \;=\; 0.85
+\]
+and we follow suit. With $d = 2$\,inch:
+\begin{equation}
+Q \;=\; 29.84\,(0.85)\,(2)^{2}\,\sqrt{P_{\text{out}}}
+   \;=\; 101.456\,\sqrt{P_{\text{out}}},
+\end{equation}
+which we invert for use in Eq.~\eqref{eq:main}:
+\begin{equation}
+\boxed{\;P_{\text{out}}(Q) \;=\; \left(\dfrac{Q}{101.456}\right)^{2}\;}
+\label{eq:pout}
+\end{equation}
+
+\section{Friction loss term (Hazen--Williams)}
+
+Friction loss in the 2\,inch pipe is computed with the Hazen--Williams
+equation, the standard tool in fire-protection hydraulics. In US units,
+pressure loss per unit length is
+\begin{equation}
+p_{f} \;=\; \dfrac{4.52\, Q^{1.852}}{C^{1.852}\, d^{4.87}}
+\qquad [\text{psi/ft}]
+\label{eq:hw}
+\end{equation}
+with $Q$ in gpm, $d$ the \emph{actual inside diameter} in inches, and $C$
+the Hazen--Williams roughness coefficient. PRC.14.1.2.2 specifies $C=120$
+(typical for steel sprinkler pipe).
+
+The pipe is nominal 2\,inch, Schedule~40. The actual inside diameter is
+$d = 2.067$\,inch, not 2.000\,inch. (Using the nominal value would
+under-predict friction loss by $\sim 18\%$ at fixed flow.)
+
+Total friction loss over the equivalent length $L$ is
+\begin{equation}
+\boxed{\;P_{\text{f}}(Q, L) \;=\; L \cdot \dfrac{4.52\, Q^{1.852}}{120^{1.852}\,(2.067)^{4.87}}\;}
+\label{eq:pf}
+\end{equation}
+
+Plugging in the constants:
+\[
+120^{1.852} \;\approx\; 7\,096, \qquad (2.067)^{4.87} \;\approx\; 36.96,
+\]
+\[
+\dfrac{4.52}{7\,096 \cdot 36.96} \;\approx\; 1.724 \times 10^{-5}
+\quad [\text{psi/ft per } Q^{1.852}].
+\]
+So in compact form,
+\begin{equation}
+P_{\text{f}}(Q, L) \;\approx\; 1.724 \times 10^{-5}\, L\, Q^{1.852}
+\qquad [\text{psi}].
+\label{eq:pf-numeric}
+\end{equation}
+
+\section{Equivalent length $L$}
+
+$L$ is the length of 2\,inch \emph{straight pipe} that would produce the
+same friction loss as the actual run, including fittings. Each fitting is
+assigned an equivalent length per Table~1 of PRC.14.1.2.2:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Fitting & Equivalent length (ft) \\
+\midrule
+Angle valve            & 29 \\
+Globe valve            & 58 \\
+Gate valve             & 1  \\
+$90^\circ$ elbow       & 5  \\
+$45^\circ$ elbow       & 2  \\
+Tee (flow turns)       & 10 \\
+Cross (flow turns)     & 10 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+So if the drain run is $\ell$ feet of straight pipe plus $n_i$ of each
+fitting type with equivalent length $L_i$,
+\begin{equation}
+L \;=\; \ell \;+\; \sum_{i}\, n_i\, L_i.
+\end{equation}
+
+\section{Combined equation}
+
+Substituting \eqref{eq:pout} and \eqref{eq:pf} into \eqref{eq:main}:
+\begin{equation}
+\boxed{\;
+P_R(Q, L) \;=\; \left(\dfrac{Q}{101.456}\right)^{2}
+\;+\; \dfrac{4.52\, L\, Q^{1.852}}{120^{1.852}\,(2.067)^{4.87}}
+\;}
+\label{eq:full}
+\end{equation}
+
+This is one equation in one unknown ($Q$). The chart in Figure~1 of
+PRC.14.1.2.2 is a graphical plot of Eq.~\eqref{eq:full} for several values
+of $L$.
+
+\section{The inverse problem (going from $P_R$ to $Q$)}
+
+In practice we measure $P_R$ and want $Q$. Eq.~\eqref{eq:full} is not
+algebraically solvable for $Q$ because $Q$ appears with two different
+exponents ($Q^2$ and $Q^{1.852}$). Two ways to handle this:
+
+\paragraph{Graphical (the guideline's method).} Read horizontally across
+Figure~1 at $P_R$, find the curve labelled with your $L$ (interpolate
+between curves if needed), then read down to $Q$. Easy and visual;
+limited to about $\pm5\%$ by the resolution of the chart.
+
+\paragraph{Numerical (what the web tool does).} Since
+$P_R(Q, L)$ is strictly increasing in $Q$ for $Q>0$, bisection converges
+unconditionally. Pick $Q_{\text{lo}}=0$ and $Q_{\text{hi}}$ generous
+(2000~gpm is plenty). At each iteration evaluate the midpoint; if the
+computed $P_R$ is less than the measured value, the true $Q$ must be
+higher (replace $Q_{\text{lo}}$ with the midpoint); otherwise replace
+$Q_{\text{hi}}$. After $n$ iterations the interval is $2000/2^{n}$ gpm
+wide, so $\sim 80$ iterations gives essentially exact answers.
+
+\section{Worked example (from PRC.14.1.2.2)}
+
+A plant has two risers, A and B, with the drain piping described below.
+A static of $P_S = 100$\,psi is recorded at riser A. Two flow scenarios
+are run.
+
+\subsection*{Equivalent lengths}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Component & Drain A & Drain B \\
+\midrule
+2\,inch pipe (ft)        & 8                & 22 \\
+Angle valves $\times 29$ & $1 \cdot 29 = 29$ & $1 \cdot 29 = 29$ \\
+$90^\circ$ ells $\times 5$ & $1 \cdot 5 = 5$   & $3 \cdot 5 = 15$ \\
+$45^\circ$ ells $\times 2$ & $1 \cdot 2 = 2$   & $1 \cdot 2 = 2$  \\
+\midrule
+\textbf{Total $L$ (ft)}  & \textbf{44}      & \textbf{68} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Scenario 1 --- Drain A alone}
+
+Measured residual at riser A: $P_R = 86$\,psi. We solve
+Eq.~\eqref{eq:full} for $Q$ with $L = 44$\,ft.
+
+Quick consistency check at $Q = 450$\,gpm:
+\begin{align*}
+P_{\text{out}} &= \left(\dfrac{450}{101.456}\right)^{2}
+                = (4.435)^{2}
+                = 19.7~\text{psi} \\[4pt]
+Q^{1.852} &= 450^{1.852} \approx 82{,}000 \\[4pt]
+P_{\text{f}}  &= 1.724\times10^{-5} \cdot 44 \cdot 82{,}000
+                \approx 62.2~\text{psi}
+                \quad\text{(more precise: } 66.3) \\[4pt]
+P_R           &= 19.7 + 66.3 \;\approx\; 86~\text{psi.} \quad\checkmark
+\end{align*}
+The bisection solver lands on $Q \approx 448$~gpm; PRC.14.1.2.2 reports
+$450$~gpm.
+
+\subsection*{Scenario 2 --- Drains A and B flowing simultaneously}
+
+Now both drains are open. The riser gauges read $P_R^{A} = 64$\,psi at
+riser A and $P_R^{B} = 70$\,psi at riser B. We solve
+Eq.~\eqref{eq:full} \emph{independently for each drain}:
+
+\begin{align*}
+\text{Drain A:}\quad & L = 44, \; P_R = 64 \;\Rightarrow\; Q_A \approx 383~\text{gpm} \quad (\text{doc: } 390) \\[2pt]
+\text{Drain B:}\quad & L = 68, \; P_R = 70 \;\Rightarrow\; Q_B \approx 333~\text{gpm} \quad (\text{doc: } 335)
+\end{align*}
+
+Total flow during the simultaneous test:
+\[
+Q_{\text{tot}} \;=\; Q_A + Q_B \;\approx\; 716~\text{gpm}
+\qquad (\text{doc: } 725~\text{gpm}).
+\]
+
+\subsection*{Two points on the water supply curve}
+
+Using \emph{riser A} as the reference gauge for both scenarios, we have:
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+ & Static $P_S$ & Residual $P_R^A$ & Total flow $Q_{\text{tot}}$ \\
+\midrule
+Scenario 1 & 100 psi & 86 psi & 450 gpm \\
+Scenario 2 & 100 psi & 64 psi & 725 gpm \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These two points plus the static $(0, P_S)$ define a straight line on
+$N^{1.85}$ semi-exponential graph paper, which is the standard
+fire-protection format for plotting a water-supply curve.
+
+\section{The water supply curve}
+
+A municipal supply curve on $N^{1.85}$ paper takes the form
+\begin{equation}
+P(Q) \;=\; P_S \;-\; k\, Q^{1.85},
+\label{eq:supply}
+\end{equation}
+which is linear in $Q^{1.85}$. With two or more $(Q_i, P_i)$ test points
+we estimate $k$ by averaging
+\[
+k_i \;=\; \dfrac{P_S - P_i}{Q_i^{1.85}}.
+\]
+
+A common reportable number is the flow at 20\,psi residual:
+\begin{equation}
+Q_{20} \;=\; \left(\dfrac{P_S - 20}{k}\right)^{1/1.85}.
+\end{equation}
+This is what would be available if the supply were stretched until the
+residual at the test point dropped to the minimum useful sprinkler
+pressure of 20\,psi --- a standard way to characterize the supply.
+
+\section{Why this method is conservative}
+
+PRC.14.1.2.2 emphasizes that a drain test result is \emph{typically more
+conservative} than a true hydrant flow test. Two reasons:
+
+\begin{enumerate}
+  \item At the flows developed in a drain test (a few hundred gpm), an
+        alarm check valve or other system check valve may only
+        partially open and ``flutter.'' The friction loss across the
+        check valve is then significant and unknown, and gets lumped
+        into the residual reading. At higher hydrant-test flows the
+        valve is fully open and that loss is small.
+  \item We adopt $c=0.85$ rather than $0.90$ for the discharge
+        coefficient, which under-counts the flow at a given residual.
+\end{enumerate}
+
+Both effects bias the inferred supply downwards. That's why the
+guideline restricts this method to \textbf{Light Hazard} and
+\textbf{Ordinary Hazard} occupancies and refuses to let you extrapolate
+the result to other risers or larger flows: the bias is at the test
+point only, and assuming it transfers is unsafe.
+
+\section{Numerical constants summary}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Symbol & Value & Description \\
+\midrule
+$c$         & $0.85$            & outlet discharge coefficient (conservative) \\
+$d_{\text{out}}$ & $2.000$ in   & nominal outlet diameter \\
+$d_{\text{pipe}}$ & $2.067$ in  & actual ID of Sch.~40 2\,inch pipe \\
+$C$         & $120$             & Hazen--Williams roughness for steel \\
+$29.84$     & ---               & US-unit constant in Eq.~\eqref{eq:disch} \\
+$4.52$      & ---               & US-unit constant in Eq.~\eqref{eq:hw} \\
+$101.456$   & $29.84\,c\,d_{\text{out}}^{2}$ & outlet pre-factor \\
+$1.724\times10^{-5}$ & $\dfrac{4.52}{C^{1.852}\,d_{\text{pipe}}^{4.87}}$ & friction pre-factor (per ft, per $Q^{1.852}$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{References}
+
+\begin{itemize}
+  \item AXA XL Risk Consulting, \emph{Property Risk Consulting Guidelines
+        PRC.14.1.2.2: Water Measurement Using Two Inch (50 mm) Drain
+        Tests}, 2020.
+\end{itemize}
+
+\end{document}
